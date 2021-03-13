@@ -35,8 +35,6 @@ class Particles extends Component
             gravityY: 800,
             on:false
         });
-        //this.emitter0.stop();
-        //this.emitter1.stop();
     }
 
 

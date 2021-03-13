@@ -49,6 +49,7 @@ class MainScene extends Scene
         player.addComponent(new Player(player,layer,layerFondo));
         player.addComponent(new Health(player,2));
         player.addComponent(new DieOnFall(player, 800));
+        player.addComponent(new PlatformerMovementController(player, 100, 10));
         
         var objectsArr = map.getObjectLayer('objetos')['objects'];
 

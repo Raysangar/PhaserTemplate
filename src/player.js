@@ -3,10 +3,6 @@ class Player extends Component
     constructor(entity,layer)
     {
         super(entity);
-        //continuación
-        this.cursor = this.getEntity().getScene().input.keyboard.createCursorKeys();
-        
-        this.jump = false;
         this.layer = layer;
     }
 
@@ -14,8 +10,7 @@ class Player extends Component
     {
         
         this.sprite = this.getEntity().getComponent('SpriteRender');
-        this.Xposition = this.sprite.x;
-        this.Yposition = this.sprite.y;
+        this.platformerMovementController = this.getEntity().getComponent('PlatformerMovementController');
         this.getEntity().getScene().physics.add.collider(this.sprite,this.layer);
         this.sprite.anims.create({
             key: 'walk',
@@ -36,43 +31,14 @@ class Player extends Component
             frameRate: 5,
             repeat: -1
         });
-        //Mejoras
+
         this.sprite.setBounce(0.2);
         this.sprite.setSize(20,65);
     }
 
     update(time,delta)
     {
-        if(this.cursor.left.isDown)
-        {
-            this.sprite.setVelocityX(-100);
-            
-            this.sprite.setFlipX(true); 
-        }
-        else if(this.cursor.right.isDown)
-        {
-            this.sprite.setVelocityX(100);
-            this.sprite.setFlipX(false); 
-        }
-        else
-        {
-            //Parado
-            this.sprite.setVelocityX(0);
-        }
-
-        if(this.jump && this.sprite.body.onFloor())
-        {
-            this.jump = false;
-        }
-        
-        if (this.cursor.space.isDown && this.sprite.body.onFloor()) {
-            
-            this.sprite.setVelocityY(-10*delta);
-            this.jump = true;
-        }
-
-
-        if(this.jump)
+        if(this.platformerMovementController.isJumping)
             this.sprite.play('jump', true);
         else if(this.sprite.body.velocity.x != 0)
             this.sprite.play('walk', true);
@@ -89,10 +55,5 @@ class Player extends Component
     {
         this.sprite.destroy();
         this.getEntity().getScene().showGameOver();
-    }
-
-    sendMessage(s)
-    {
-        console.log("Mensaje recibido "+s);
     }
 }
