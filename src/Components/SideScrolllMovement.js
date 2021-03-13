@@ -15,12 +15,9 @@ class SideScrollMovement extends Component
     start()
     {
         this.sprite = this.getEntity().getComponent('SpriteRender');
-        if (this.walkAnimInfo != null)
-            this.walkAnimInfo.createFor(this.sprite, this.getEntity().getScene());
-        if (this.idleAnimInfo != null)
-            this.idleAnimInfo.createFor(this.sprite, this.getEntity().getScene());
-        if (this.jumpAnimInfo)
-            this.jumpAnimInfo.createFor(this.sprite, this.getEntity().getScene());
+        this.tryCreateAnimation(this.walkAnimInfo);
+        this.tryCreateAnimation(this.idleAnimInfo);
+        this.tryCreateAnimation(this.jumpAnimInfo);
     }
 
     setMovement(velocity)
@@ -47,19 +44,22 @@ class SideScrollMovement extends Component
             this.isJumping = false;
         
         if(this.isJumping)
-        {
-            if (this.jumpAnimInfo != null)
-                this.jumpAnimInfo.playFor(this.sprite);
-        }
+            this.tryPlayAnimation(this.jumpAnimInfo);
         else if(this.sprite.body.velocity.x != 0)
-        {
-            if (this.walkAnimInfo != null)
-                this.walkAnimInfo.playFor(this.sprite);
-        }
+            this.tryPlayAnimation(this.walkAnimInfo);
         else
-        {
-            if (this.idleAnimInfo != null)
-                this.idleAnimInfo.playFor(this.sprite);
-        }
+            this.tryPlayAnimation(this.idleAnimInfo);
+    }
+
+    tryCreateAnimation(animationInfo)
+    {
+        if (animationInfo != undefined)
+            animationInfo.createFor(this.sprite, this.getEntity().getScene());
+    }
+
+    tryPlayAnimation(animationInfo)
+    {
+        if (animationInfo != undefined)
+            animationInfo.playFor(this.sprite);
     }
 }

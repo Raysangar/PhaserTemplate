@@ -50,7 +50,7 @@ class MainScene extends Scene
         player.addComponent(new Health(player,2));
         player.addComponent(new DieOnFall(player, 800));
 
-        let walkAnimInfo = new AnimationInfo('sprites_jugador', 'walk', 'walk-', 10, true, 1, 18);
+        let walkAnimInfo = new AnimationInfo('sprites_jugador', 'walk', 'walk-', 10, true, 1, 16);
         let idleAnimInfo = new AnimationInfo('sprites_jugador', 'idle', 'idle-', 10, true, 1, 4);
         let jumpAnimInfo = new AnimationInfo('sprites_jugador', 'jump', 'jump-', 5, true, 1, 4);
         player.addComponent(new SideScrollMovement(player, true, walkAnimInfo, idleAnimInfo, jumpAnimInfo));

@@ -4,7 +4,10 @@ class Drone extends Component
     {
         super(entity);
         this.player = player;
-        this.area = area*32;        
+        this.area = area*32;     
+        
+        this.walkAnimInfo = new AnimationInfo('drone_sprite', 'left', 'drone-', 5, true, 1, 1);
+        this.rotateAnimInfo = new AnimationInfo('drone_sprite', 'rotate', 'drone-', 5, true, 2, 4);
     }
 
     start()
@@ -15,18 +18,8 @@ class Drone extends Component
         this.getEntity().getScene().physics.add.overlap(this.sprite, this.player.getComponent('SpriteRender'), this.spriteHit,null,this);
         this.getEntity().getScene().physics.add.collider(this.sprite,this.layer);
 
-        this.sprite.anims.create({
-            key: 'left',
-            frames: this.getEntity().getScene().anims.generateFrameNames('drone_sprite', { start: 1, end: 1, prefix: 'drone-' }),
-            frameRate: 5,
-            repeat: -1
-        });
-        this.sprite.anims.create({
-            key: 'rotate',
-            frames: this.getEntity().getScene().anims.generateFrameNames('drone_sprite', { start: 2, end: 4, prefix: 'drone-' }),
-            frameRate: 5,
-            repeat: -1
-        });
+        this.walkAnimInfo.createFor(this.sprite, this.getEntity().getScene());
+        this.rotateAnimInfo.createFor(this.sprite, this.getEntity().getScene());
 
         if(this.area > 0)
         {
@@ -65,12 +58,14 @@ class Drone extends Component
         let distance =  Math.abs(this.nextPositionX - this.sprite.x);
         if(distance < 4)
         {
-            this.sprite.play('rotate', true);
+            this.rotateAnimInfo.playFor(this.sprite);
             this.state = nextState;
             this.nextPositionX = this.nextPositionX + this.area * (speed < 0 ? 2 : -2);
             this.time = time;
         }
         else if ((time - this.time ) > 60)
-            this.sprite.play('left', true);
+        {
+            this.walkAnimInfo.playFor(this.sprite);
+        }
     }
 }
