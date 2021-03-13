@@ -89,7 +89,6 @@ class Entity
     {
         this.name = name;
         this.scene = scene;
-        //this.tag = tag;
         this.components = new Map();
         this.activeComponents = [];
     }
@@ -103,11 +102,6 @@ class Entity
     {
         return this.name;
     }
-
-    /*getTag()
-    {
-        return this.tag;
-    }*/
 
     addComponent(component, autoActivate = true)
     {
@@ -125,30 +119,19 @@ class Entity
 
     start()
     {
-        //recorro todos  los componentes activos para inicializarlos
-        //console.log("longitud de los componentes "+this.activeComponents.length + " "+this.components.length);
         for(var i = 0; i < this.activeComponents.length; i++)
-        {
-            //console.log("componente i "+i+" name "+this.activeComponents[i].constructor.name);
             this.activeComponents[i].start();
-        }
     }
 
     update(time,delta)
     {
-        //recorro todos los componentes activos para darles update
         for(var i = 0; i < this.activeComponents.length; i++)
-        {
-            //console.log("update "+this.activeComponents[i].constructor.name);
             this.activeComponents[i].update(time,delta);
-        }
     }
 
-    //manda un mensaje a todos los componentes
-    sendMessage(sender,msg,argm,checkRecption = false)
+    sendMessage(sender, msg, argm, checkReception = false)
     {
         let count = 0;
-        //console.error("Sending msg "+msg+" from "+sender+" to "+this+" with arg "+argm);
         for(var i = 0; i < this.activeComponents.length; i++)
         {
 
@@ -158,7 +141,7 @@ class Entity
                 count++;
             }
         }
-        if(checkRecption && count == 0)
+        if(checkReception && count == 0)
             console.error("Nobody heard the message "+msg);
     }
 }

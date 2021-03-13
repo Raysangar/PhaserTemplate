@@ -53,10 +53,13 @@ class MainScene extends Scene
         let walkAnimInfo = new AnimationInfo('sprites_jugador', 'walk', 'walk-', 10, true, 1, 16);
         let idleAnimInfo = new AnimationInfo('sprites_jugador', 'idle', 'idle-', 10, true, 1, 4);
         let jumpAnimInfo = new AnimationInfo('sprites_jugador', 'jump', 'jump-', 5, true, 1, 4);
-        player.addComponent(new SideScrollMovement(player, true, walkAnimInfo, idleAnimInfo, jumpAnimInfo));
-        player.addComponent(new PlatformerMovementController(player, 100, 10));
+        player.addComponent(new Movement(player, true, true, walkAnimInfo, idleAnimInfo, jumpAnimInfo));
+        player.addComponent(new PlatformerMovementController(player, 10, 10));
         
         var objectsArr = map.getObjectLayer('objetos')['objects'];
+
+        let droneWalkAnimInfo = new AnimationInfo('drone_sprite', 'left', 'drone-', 5, true, 1, 1);
+        let droneRotateAnimInfo = new AnimationInfo('drone_sprite', 'rotate', 'drone-', 5, true, 2, 4);
 
         for(var i = 0; i < objectsArr.length; i++)
         {
@@ -78,12 +81,13 @@ class MainScene extends Scene
                 this.addEntity(drone);
                 drone.addComponent(droneSprite);
                 drone.addComponent(new RigidBody(drone,false));
-                drone.addComponent(new SideScrollMovement(drone, false));
+                drone.addComponent(new Movement(drone, false, true));
                 if(attrName == "Area")
-                    drone.addComponent(new Drone(drone,player,attrValue));
+                    drone.addComponent(new WandererBehaviour(drone, 10, droneWalkAnimInfo, droneRotateAnimInfo, attrValue))
                 else
-                    drone.addComponent(new Drone(drone,player));
-                drone.addComponent(new Particles(drone)); //añadir en el array
+                    drone.addComponent(new WandererBehaviour(drone, 10, droneWalkAnimInfo, droneRotateAnimInfo))
+                drone.addComponent(new Drone(drone,player));
+                drone.addComponent(new Particles(drone));
              }
         }
 

@@ -1,9 +1,11 @@
-class SideScrollMovement extends Component
+class Movement extends Component
 {
-    constructor(entity, spriteIsFacingRight, walkAnimInfo, idleAnimInfo, jumpAnimInfo)
+    constructor(entity, spriteIsFacingRight, horizontalOnly, walkAnimInfo, idleAnimInfo, jumpAnimInfo)
     {
         super(entity);
-        this.currentVelocity = 0;
+        this.horizontalOnly = horizontalOnly;
+        this.currentVelocityY = 0;
+        this.currentVelocityX = 0;
         this.isJumping = false;
         
         this.spriteIsFacingRight = spriteIsFacingRight;
@@ -20,11 +22,12 @@ class SideScrollMovement extends Component
         this.tryCreateAnimation(this.jumpAnimInfo);
     }
 
-    setMovement(velocity)
+    setMovement(velocityX, velocityY)
     {
-        this.currentVelocity = velocity;
-        if (velocity != 0)
-            this.sprite.setFlipX(this.spriteIsFacingRight ? velocity < 0 : velocity > 0);
+        this.currentVelocityX = velocityX;
+        this.currentVelocityY = velocityY;
+        if (velocityX != 0)
+            this.sprite.setFlipX(this.spriteIsFacingRight ? velocityX < 0 : velocityX > 0);
     }
 
     jump(jumpForce)
@@ -38,7 +41,9 @@ class SideScrollMovement extends Component
 
     update(time, delta)
     {
-        this.sprite.setVelocityX(this.currentVelocity);
+        this.sprite.setVelocityX(this.currentVelocityX * delta);
+        if (!this.horizontalOnly)
+            this.sprite.setVelocityY(this.currentVelocityY * delta);
 
         if(this.isJumping && this.sprite.body.onFloor())
             this.isJumping = false;
