@@ -6,40 +6,23 @@ class PlatformerMovementController extends Component
         this.cursor = this.getEntity().getScene().input.keyboard.createCursorKeys();
         this.speed = speed;
         this.jumpForce = jumpForce;
-        this.isJumping = false;
     }
 
-    start()
+    start() 
     {
-        this.sprite = this.getEntity().getComponent('SpriteRender');
+        this.movementComponent = this.getEntity().getComponent('SideScrollMovement');
     }
 
     update(time, delta)
     {
         if(this.cursor.left.isDown)
-        {
-            this.sprite.setVelocityX(-this.speed);
-            this.sprite.setFlipX(true); 
-        }
+            this.movementComponent.setMovement(-this.speed);
         else if(this.cursor.right.isDown)
-        {
-            this.sprite.setVelocityX(this.speed);
-            this.sprite.setFlipX(false); 
-        }
+            this.movementComponent.setMovement(this.speed);
         else
-        {
-            this.sprite.setVelocityX(0);
-        }
-
-        if(this.isJumping && this.sprite.body.onFloor())
-        {
-            this.isJumping = false;
-        }
+            this.movementComponent.setMovement(0);
         
-        if (this.cursor.space.isDown && this.sprite.body.onFloor()) {
-            
-            this.sprite.setVelocityY(-this.jumpForce * delta);
-            this.isJumping = true;
-        }
+        if (this.jumpForce > 0 && this.cursor.space.isDown) 
+            this.movementComponent.jump(this.jumpForce * delta);
     }
 }

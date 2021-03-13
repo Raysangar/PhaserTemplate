@@ -49,6 +49,11 @@ class MainScene extends Scene
         player.addComponent(new Player(player,layer,layerFondo));
         player.addComponent(new Health(player,2));
         player.addComponent(new DieOnFall(player, 800));
+
+        let walkAnimInfo = new AnimationInfo('sprites_jugador', 'walk', 'walk-', 10, true, 1, 18);
+        let idleAnimInfo = new AnimationInfo('sprites_jugador', 'idle', 'idle-', 10, true, 1, 4);
+        let jumpAnimInfo = new AnimationInfo('sprites_jugador', 'jump', 'jump-', 5, true, 1, 4);
+        player.addComponent(new SideScrollMovement(player, true, walkAnimInfo, idleAnimInfo, jumpAnimInfo));
         player.addComponent(new PlatformerMovementController(player, 100, 10));
         
         var objectsArr = map.getObjectLayer('objetos')['objects'];
@@ -62,7 +67,7 @@ class MainScene extends Scene
                 this.addEntity(seta);
                 seta.addComponent(new SpriteRender(seta,obj.x+16,obj.y-16, 'seta'));
                 seta.addComponent(new RigidBody(seta,false));
-                seta.addComponent(new Seta(seta,playerSprite)); //añadir en el array
+                seta.addComponent(new Seta(seta,playerSprite));
              }else if(obj.gid == 181)
              {
                 let attrName = obj.properties[0]["name"];
@@ -73,6 +78,7 @@ class MainScene extends Scene
                 this.addEntity(drone);
                 drone.addComponent(droneSprite);
                 drone.addComponent(new RigidBody(drone,false));
+                drone.addComponent(new SideScrollMovement(drone, false));
                 if(attrName == "Area")
                     drone.addComponent(new Drone(drone,player,attrValue));
                 else
