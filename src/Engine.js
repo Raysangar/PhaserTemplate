@@ -7,7 +7,6 @@ class Scene extends Phaser.Scene
 
     init()
     {
-        console.log("Reiniciamos la escena");
         this.activeEntities = [];
         this.entityMap = new Map();
     }
@@ -47,20 +46,14 @@ class Scene extends Phaser.Scene
 
     start ()
     {
-
         for(var i = 0; i < this.activeEntities.length; i++ )
-        {
-            //console.log("Star "+this.activeEntities[i].getName());
             this.activeEntities[i].start();
-        }
     }
 
     update (time, delta)
     {
         for(var i = 0; i < this.activeEntities.length; i++ )
-        {
             this.activeEntities[i].update(time,delta);
-        }
     }
 
 }
@@ -132,17 +125,26 @@ class Entity
     sendMessage(sender, msg, argm, checkReception = false)
     {
         let count = 0;
+        if (this.trySendMessage(this, sender, msg, argm))
+            ++count;
         for(var i = 0; i < this.activeComponents.length; i++)
         {
-
-            let fun = this.activeComponents[i][msg];
-            if (fun != undefined) { 
-                fun.call(this.activeComponents[i],sender,argm);
-                count++;
-            }
+            if (this.trySendMessage(this.activeComponents[i], sender, msg, argm))
+                ++count;
         }
         if(checkReception && count == 0)
-            console.error("Nobody heard the message "+msg);
+            console.error("Nobody heard the message " + msg);
+    }
+
+    trySendMessage(receiver, sender, msg, argm)
+    {
+        let fun = receiver[msg];
+        if (fun != undefined) 
+        { 
+            fun.call(receiver, sender, argm);
+            return true;
+        }
+        return false;
     }
 }
 
@@ -155,26 +157,12 @@ class SpriteRender extends Phaser.Physics.Arcade.Sprite
         this.entity.getScene().add.existing(this);
     }
 
-    /*getEntity()
-    {
-        return this.entity;
-    }*/
-
-    start()
-    {
-
-    }
-
-    update(time,delta)
-    {
-
-    }
-
+    start(){}
+    update(time,delta){}
 }
 
 SpriteRender.prototype.getEntity = Component.prototype.getEntity;
 SpriteRender.prototype.componentInit = Component.prototype.init;
-
 
 
 class RigidBody extends Component
@@ -207,11 +195,5 @@ class RigidBody extends Component
             this.sprite.body.physicsType = this.ftype;
     }
 
-    
-
-    update(time,delta)
-    {
-
-    }
-
+    update(time,delta){}
 }
