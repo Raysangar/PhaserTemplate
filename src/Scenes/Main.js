@@ -49,7 +49,7 @@ class MainScene extends Scene
              var obj = objectsArr[i];
              if(obj.gid == 115)
              {
-                let seta = new ScoreObject('Seta' + obj.id, this, player, obj.x, obj.y, 'seta', 10);
+                let seta = new ScoreObject('Seta' + obj.id, this, playerSprite, obj.x, obj.y, 'seta', 10);
                 this.addEntity(seta);
              }else if(obj.gid == 181)
              {
