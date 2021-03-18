@@ -19,7 +19,6 @@ class ScoreObject extends Entity
     spriteHit () 
     {
         this.getScene().deleteEntity(this);
-        this.sprite.destroy();
         this.getScene().addPoints(this.scoreToAdd);
     }
 }

@@ -25,6 +25,5 @@ class Drone extends Entity
         this.scene.addEntity(new ExplosionParticles("DroneParticles", this.scene, this.sprite.x, this.sprite.y));
         this.player.sendMessage(this.player,"damage",1,true);
         this.getScene().deleteEntity(this);
-        this.sprite.destroy();
     }
 }

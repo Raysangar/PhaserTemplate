@@ -13,15 +13,17 @@ class PlatformerPlayer extends Entity
         let idleAnimInfo = new AnimationInfo('sprites_jugador', 'idle', 'idle-', 10, true, 1, 4);
         let jumpAnimInfo = new AnimationInfo('sprites_jugador', 'jump', 'jump-', 5, true, 1, 4);
         this.addComponent(new Movement(this, true, true, walkAnimInfo, idleAnimInfo, jumpAnimInfo));
-        this.addComponent(new PlatformerMovementController(this, 10, 10));
+        this.addComponent(new PlatformerMovementController(this, 10, 15));
     }
-
+    
     start()
     {
         super.start();
         this.getScene().physics.add.collider(this.sprite,this.layer);
+        this.getScene().physics.add.collider(this.sprite, this.getScene().goalLayer, this.win, null, this);
         this.sprite.setBounce(0.2);
-        this.sprite.setSize(20,65);
+        this.sprite.setSize(20,50);
+        this.sprite.setOffset(25, 15);
     }
 
     onHealthChanged(sender, health)
@@ -29,9 +31,13 @@ class PlatformerPlayer extends Entity
         this.getScene().updateHearts(health);
     }
 
-    destroyEntity()
+    destroy()
     {
-        this.sprite.destroy();
-        this.getEntity().getScene().showGameOver();
+        super.destroy();
+        this.getScene().showGameOver();
+    }
+
+    win() {
+        this.getScene().onPlayerWin();
     }
 }

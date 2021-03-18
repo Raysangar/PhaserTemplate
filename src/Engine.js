@@ -5,11 +5,20 @@ class Scene extends Phaser.Scene
         super(name);
         this.alreadyStarted = false;
     }
-
+    
     init()
     {
+        this.pauseKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
         this.activeEntities = [];
+        this.entitiesToDestroy = [];
         this.entityMap = new Map();
+    }
+
+    loadEntities(layer, instantiator) {
+        this.map.getObjectLayer(layer).objects
+            .forEach((item) => {
+                this.addEntity(instantiator(this, item));
+            });
     }
 
     addEntity(entity, autoActivate = true)
@@ -23,7 +32,7 @@ class Scene extends Phaser.Scene
 
     deleteEntity(entity)
     {
-        this.deactivateEntity(entity);
+        this.entitiesToDestroy.push(entity);
     }
 
     activateEntity(entity)
@@ -56,10 +65,25 @@ class Scene extends Phaser.Scene
 
     update (time, delta)
     {
+        for(var i = 0; i < this.entitiesToDestroy.length; i++)
+        {
+            this.deactivateEntity(this.entitiesToDestroy[i]);
+            this.entitiesToDestroy[i].destroy();
+        }
+        this.entitiesToDestroy = [];
+
         for(var i = 0; i < this.activeEntities.length; i++ )
             this.activeEntities[i].update(time,delta);
+        
+            if (this.pauseKey.isDown)
+            this.pauseGame();
     }
 
+    pauseGame() 
+    {
+        this.scene.pause();
+        this.scene.launch('Pause');
+    }
 }
 
 class Component
@@ -150,6 +174,11 @@ class Entity
         }
         return false;
     }
+
+    destroy()
+    {
+        this.sendMessage(this, "onEntityDestroyed");
+    }
 }
 
 class SpriteRender extends Phaser.Physics.Arcade.Sprite
@@ -163,6 +192,10 @@ class SpriteRender extends Phaser.Physics.Arcade.Sprite
 
     start(){}
     update(time,delta){}
+    onEntityDestroyed()
+    {
+        this.destroy();
+    }
 }
 
 SpriteRender.prototype.getEntity = Component.prototype.getEntity;
