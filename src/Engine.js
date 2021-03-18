@@ -3,6 +3,7 @@ class Scene extends Phaser.Scene
     constructor(name)
     {
         super(name);
+        this.alreadyStarted = false;
     }
 
     init()
@@ -16,6 +17,8 @@ class Scene extends Phaser.Scene
         this.entityMap.set(entity.getName(),entity);
         if(autoActivate)
             this.activeEntities.push(entity);
+        if (this.alreadyStarted)
+            entity.start();
     }
 
     deleteEntity(entity)
@@ -46,6 +49,7 @@ class Scene extends Phaser.Scene
 
     start ()
     {
+        this.alreadyStarted = true;
         for(var i = 0; i < this.activeEntities.length; i++ )
             this.activeEntities[i].start();
     }

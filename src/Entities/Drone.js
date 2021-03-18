@@ -12,7 +12,6 @@ class Drone extends Entity
         let droneWalkAnimInfo = new AnimationInfo('drone_sprite', 'left', 'drone-', 5, true, 1, 1);
         let droneRotateAnimInfo = new AnimationInfo('drone_sprite', 'rotate', 'drone-', 5, true, 2, 4);
         this.addComponent(new WandererBehaviour(this, 10, droneWalkAnimInfo, droneRotateAnimInfo, area))
-        this.addComponent(new Particles(this));
     }
 
     start()
@@ -23,11 +22,9 @@ class Drone extends Entity
     }
 
     spriteHit () {
+        this.scene.addEntity(new ExplosionParticles("DroneParticles", this.scene, this.sprite.x, this.sprite.y));
+        this.player.sendMessage(this.player,"damage",1,true);
         this.getScene().deleteEntity(this);
         this.sprite.destroy();
-        this.player.sendMessage(this.player,"damage",1,true);
-        let particles = this.getComponent("Particles");
-        if(particles != undefined)
-            particles.showParticles();
     }
 }
