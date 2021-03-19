@@ -6,7 +6,7 @@ var config = {
     parent: "canvas",
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
-    scene: [Boot, MainMenu, PlatformerScene, Pause],
+    scene: [Boot, MainMenu, Platformer, HogansAlley, Pause],
     physics: {
         default: 'arcade',
         arcade: {
@@ -17,3 +17,4 @@ var config = {
 };
 
 var game = new Phaser.Game(config);
+var gameplaySceneKey = "Platformer";

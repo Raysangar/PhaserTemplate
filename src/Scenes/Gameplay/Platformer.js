@@ -1,4 +1,4 @@
-class PlatformerScene extends Scene
+class Platformer extends Scene
 {
     constructor()
     {
@@ -29,28 +29,28 @@ class PlatformerScene extends Scene
         this.load.atlas('drone_sprite','res/drone/drone.png',
         'res/drone/drone_atlas.json');
 
-        this.music = this.sound.add('gameplayMusic', { loop: true });
         this.powerupSound = this.sound.add('powerup');
         this.coinSound = this.sound.add('coin');
     }
 
     create()
     {
-        this.music.play();
-        this.hearts = [];
-        
+        super.create();
         this.loadBackground();
 
         this.loadMap();
 
+        this.initUi();
+        this.initGameManager();
+        
         this.player = new PlatformerPlayer('player',this, this.layer);
         this.addEntity(this.player);
         this.loadEntities("Coin", this.instantiateCoin);
         this.loadEntities("ShyGuy", this.instantiateDrone);
         
         this.initCamera();
+
         this.start();
-        this.createUI();
     }
 
     loadBackground() {
@@ -114,55 +114,14 @@ class PlatformerScene extends Scene
         this.cameras.main.startFollow(this.player.sprite, false, 1, 0, 0, -500);
     }
 
-    createUI()
+    initUi()
     {
-        var scoreCounterIcon  = this.add.image(16, 16, 'seta');
-        scoreCounterIcon.setScrollFactor(0,0);
-        scoreCounterIcon.fixedToCamera = true;
-
-        this.scoreLabel  = this.add.text(30, 0, " 0");
-        this.scoreLabel.setFontSize(48);
-        this.scoreLabel.setFill('#000');
-        this.scoreLabel.setScrollFactor(0);
-        this.score = 0;
+        this.uiManager.addComponent(new ScoreCounter(this.uiManager, "seta"));
+        this.uiManager.addComponent(new LifesCounter(this.uiManager));
     }
 
-    addPoints(t)
+    initGameManager()
     {
-        this.score += t;
-        this.scoreLabel.text = this.score;
+        this.gameManager.addComponent(new Score(this.gameManager));
     }
-
-    showGameOver()
-    {
-        this.music.stop();
-        this.scene.start('MainMenu', {gameover: true});
-    }
-
-    onPlayerWin() {
-        this.music.stop();
-        this.scene.start('MainMenu', { win: true });
-    }
-
-    updateHearts(lifes)
-    {
-        this.destroyHears();
-        for(var i = 0; i < lifes; ++i)
-        {
-            var heart  = this.add.image(windows.width - (33 * (i + 1)), 16, 'heart');
-            heart.setScrollFactor(0,0);
-            heart.fixedToCamera = true;
-            this.hearts.push(heart);
-        }
-    }
-
-    destroyHears()
-    {
-        for(var i = 0; i < this.hearts.length; ++i)
-        {
-            this.hearts[i].destroy();
-        }
-        this.hearts = [];
-    }
-
 }

@@ -51,6 +51,6 @@ class MainMenu extends Phaser.Scene {
     startGame() {
         this.music.stop();
         this.playMusic.play();
-        setTimeout(() => this.scene.start('Platformer'), 2000);
+        setTimeout(() => this.scene.start(gameplaySceneKey), 2000);
     }
 }

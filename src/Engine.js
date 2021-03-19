@@ -12,6 +12,25 @@ class Scene extends Phaser.Scene
         this.activeEntities = [];
         this.entitiesToDestroy = [];
         this.entityMap = new Map();
+        this.music = this.sound.add('gameplayMusic', { loop: true });
+    }
+    
+    create()
+    {
+        this.music.play();
+        this.gameManager = new Entity("GameManager", this);
+        this.uiManager = new Entity("UiManager", this);
+    }
+
+    showGameOver()
+    {
+        this.music.stop();
+        this.scene.start('MainMenu', {gameover: true});
+    }
+
+    onPlayerWin() {
+        this.music.stop();
+        this.scene.start('MainMenu', { win: true });
     }
 
     loadEntities(layer, instantiator) {
@@ -192,6 +211,12 @@ class SpriteRender extends Phaser.Physics.Arcade.Sprite
 
     start(){}
     update(time,delta){}
+
+    changeSprite(spriteSheet,sprite)
+    {
+        this.setTexture(spriteSheet,sprite);
+    }
+
     onEntityDestroyed()
     {
         this.destroy();

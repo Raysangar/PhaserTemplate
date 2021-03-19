@@ -19,6 +19,6 @@ class ScoreObject extends Entity
     spriteHit () 
     {
         this.getScene().deleteEntity(this);
-        this.getScene().addPoints(this.scoreToAdd);
+        this.getScene().gameManager.sendMessage(this, "onPointsObtained", this.scoreToAdd);
     }
 }

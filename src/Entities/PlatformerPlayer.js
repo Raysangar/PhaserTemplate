@@ -28,7 +28,7 @@ class PlatformerPlayer extends Entity
 
     onHealthChanged(sender, health)
     {
-        this.getScene().updateHearts(health);
+        this.getScene().uiManager.sendMessage(this, "onHealthChanged", health);
     }
 
     destroy()
