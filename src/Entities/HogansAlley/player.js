@@ -37,13 +37,6 @@ class Player extends Phaser.Physics.Arcade.Sprite
     }
 
 
-    damage()
-    {
-        this.health -= 1;
-        this.scene.setHelth(this.health);
-        console.log("damage "+this.health);
-    }
-
     isDeath()
     {
         return  this.health <= 0;

@@ -202,9 +202,13 @@ class Entity
 
 class SpriteRender extends Phaser.Physics.Arcade.Sprite
 {
-    constructor(entity,x,y,spriteName)
+    constructor(entity,x,y,spriteName, spriteSheet = undefined)
     {
-        super(entity.getScene(),x,y,spriteName);
+        if (spriteSheet == undefined)
+            super(entity.getScene(),x,y,spriteName);
+        else
+            super(entity.getScene(),x,y,spriteSheet, spriteName);
+
         this.componentInit(entity);
         this.entity.getScene().add.existing(this);
     }

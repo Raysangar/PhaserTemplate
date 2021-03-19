@@ -1,4 +1,4 @@
-var windows = {width:800,height: 480}
+var windows = {width:1024,height: 896} //Platformer {width:800,height: 480}
 var config = {
     type: Phaser.AUTO,
     width: windows.width,
@@ -10,11 +10,11 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 200 },
+            gravity: { y: 0 }, //platformer 200
             debug:true
         }
     }
 };
 
 var game = new Phaser.Game(config);
-var gameplaySceneKey = "Platformer";
+var gameplaySceneKey = "HogansAlley";
